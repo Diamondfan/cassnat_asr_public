@@ -1,5 +1,8 @@
 # Speech-transformer (Auto-regressive and Non-autoregressive)
 
+I do not test the entire pipeline yet. It is not friendly for beginners at this moment. It is better to use this when you are familiar with ESPNet.
+
+
 This is the implementation of our work "Using CTC alignments as latent variables for Non-autoregressive speech-transformer". Some codes are borrowed from [Espnet](https://github.com/espnet/espnet) and [transformer implementation in Harvard NLP group](https://nlp.seas.harvard.edu/2018/04/03/attention.html).
 
 ## 1. Requirements
