@@ -5,7 +5,7 @@
 # The data are already downloaded in the corresponding dir
 data=/data/Databases/LibriSpeech/Librispeech
 
-stage=3
+stage=1
 end_stage=3
 featdir=data/fbank
 

@@ -1,6 +1,6 @@
 #model config
 model_type: "transformer"
-input_size: 240 
+input_size: 80
 N_enc: 12
 d_model: 512 #256
 d_ff: 2048    
@@ -8,19 +8,24 @@ n_head: 8 #4
 dropout: 0.1 
 causal: False
 forward: True
+ctc_alpha: 1
+interctc_alpha: 0
+interctc_layer: 0
+resume_model: ""
 
 #conformer related conf
+use_conv_enc: False
 share_ff: False
 d_encff: 1024
 d_decff: 2048
 pos_type: "relative"
-max_relative_len: 20
-kernel_size: 31
+enc_max_relative_len: 20
+enc_kernel_size: 31
 
 n_features: 80
 vocab_size: 4990
 left_ctx: 0
-right_ctx: 2
+right_ctx: 0
 skip_frame: 1
 
 #noam warm up
@@ -39,16 +44,31 @@ s_warm: 2000
 s_decay: 40000
 s_keep: 160000
 
-batch_type: "utterance"   #utterance or frame
-batch_size: 16            #not used for iterable dataset
-batch_num: 16 #24000
+#normal
+learning_rate: 0.0002
+min_lr: 0.000002
+patience: 2
+anneal_lr_ratio: 0.5
+
+# dataloader
+dataset_type: "DynamicDataset"   #"SpeechDataset, DynamicDataset"
+max_len: 5000
+batch_size: 16
+
+batch_type: "utterance"
+max_frmlen: 800 
+max_lablen: 150 
+filter_max: 5000
+filter_min: 0
 
 padding_idx: 0
 accum_grad: 2
 grad_clip: 5
+weight_decay: 0
 
 use_gpu: True
 
+use_cmvn: True
 use_specaug: False
 spec_aug:
   resize_mode: "PIL"         #time warp is temporarily deactivated
@@ -59,3 +79,4 @@ spec_aug:
   n_time_mask: 10
   inplace: True
   replace_with_zero: False
+

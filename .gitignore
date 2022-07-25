@@ -1,0 +1,4 @@
+egs/*/data
+egs/*/exp
+*/*/__pycache__/*
+*/*/*/__pycache__/*

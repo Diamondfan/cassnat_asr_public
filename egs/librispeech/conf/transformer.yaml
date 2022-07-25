@@ -1,21 +1,21 @@
 #model configuration
-model_type: "transformer"
-input_size: 240
+model_type: "conformer"
+input_size: 80
 N_enc: 12
 N_dec: 6
 d_model: 512 #256
 d_ff: 2048          
 n_head: 8 #4
 dropout: 0.1
-ctc_alpha: 1
-interctc_alpha: 0
-interctc_layer: 0
+ctc_alpha: 0.5
+interctc_alpha: 0.5
+interctc_layer: 6
 label_smooth: 0.1
 disable_ls: False
 resume_model: ""
 
 #conformer related conf
-use_conv_enc: False
+use_conv_enc: True
 share_ff: False
 d_encff: 1024
 d_decff: 2048
@@ -26,13 +26,13 @@ enc_kernel_size: 31
 n_features: 80
 vocab_size: 4990
 left_ctx: 0
-right_ctx: 2
+right_ctx: 0
 skip_frame: 1
 
 #noam warm up
-warmup_type: "custom_linear"  # noam_warmup, custom_exp, custom_linear
-noam_factor: 5               # learning rate for noam_wamup, factor for custom_exp
-warmup_steps: 25000
+warmup_type: "noam_warmup"  # noam_warmup, custom_exp, custom_linear
+noam_factor: 0.001               # learning rate for noam_wamup, factor for custom_exp
+warmup_steps: 15000
 total_steps: 250000           # for custom_linear
 
 #cosine learning schedule
@@ -41,12 +41,12 @@ cosine_warmup: 1000
 
 #Double, multistep
 decay_rate: 0.01
-s_warm: 1250
+s_warm: 2000
 s_decay: 50000
 s_keep: 200000
 
 #normal
-learning_rate: 0.0002
+learning_rate: 0.001
 min_lr: 0.000002
 patience: 2
 anneal_lr_ratio: 0.5

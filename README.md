@@ -1,7 +1,5 @@
 # Speech-transformer (Auto-regressive and Non-autoregressive)
 
-I do not test the entire pipeline yet. It is not friendly for beginners at this moment. It is better to use this when you are familiar with ESPNet.
-
 
 This is the implementation of our work "Using CTC alignments as latent variables for Non-autoregressive speech-transformer". Some codes are borrowed from [Espnet](https://github.com/espnet/espnet) and [transformer implementation in Harvard NLP group](https://nlp.seas.harvard.edu/2018/04/03/attention.html).
 
@@ -19,9 +17,10 @@ pip install -r requirements.txt
 ## 2. Example, run librispeech.
 
 1. Go to egs/librispeech. Modify path.sh and specify the kaldi path (for feature extraction and etc.).
-2. Check the conf/transformer.yaml and make revisions on hyparameters if you like.
-3. ./run.sh. I suggest to run the script step by step.
-4. ./run\_fanat.sh. Run the non-autoregressive model. You can directly run this step if you want to skip the Auto-regressive transformer.
+2. ./run\_prepare.sh for preparing librispeech data (for the 100h experiment).
+3. Check the conf/transformer.yaml and make revisions on hyparameters if you like.
+3. ./run\_art.sh. I suggest to run the script step by step.
+4. ./run\_cassnat.sh. Run the non-autoregressive model. You can directly run this step if you want to skip the Auto-regressive transformer.
 
 All the python codes are under src/. Some codes may not well organized since this is still in the period of experiments
 

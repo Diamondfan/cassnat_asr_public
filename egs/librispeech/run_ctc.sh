@@ -1,15 +1,15 @@
+# 2022 Ruchao Fan
 
-stage=3
-end_stage=3
-featdir=data/fbank
+stage=1
+end_stage=1
 
 . ./cmd.sh
 . ./path.sh
 . parse_options.sh
 
-asr_exp=exp_ctc/char_tsfm_noam10k_pk2e-4/
-unit=char
-bpemodel=data/dict/bpemodel_unigram_5000
+asr_exp=exp/100h_test/
+unit=wp
+bpemodel=data/dict/bpemodel_unigram_1024
 
 if [ $stage -le 1 ] && [ $end_stage -ge 1 ]; then
 
@@ -17,22 +17,18 @@ if [ $stage -le 1 ] && [ $end_stage -ge 1 ]; then
     mkdir -p $asr_exp
   fi  
 
-  CUDA_VISIBLE_DEVICES="0,1,2,3" ctc_train.py \
+  CUDA_VISIBLE_DEVICES="2" train_asr.py \
+    --task "ctc" \
     --exp_dir $asr_exp \
     --train_config conf/ctc.yaml \
-    --data_config conf/data_ctc.yaml \
-    --epochs 100 \
-    --save_epoch 40 \
-    --learning_rate 0.002 \
-    --min_lr 0.00001 \
+    --data_config conf/data_wp.yaml \
+    --optim_type "noam" \
+    --epochs 80 \
+    --start_saving_epoch 40 \
     --end_patience 10 \
-    --opt_type "noam" \
-    --weight_decay 0 \
-    --ctc_alpha 1 \
-    --interctc_alpha 0 \
-    --use_cmvn \
     --seed 1234 \
-    --print_freq 50 > $asr_exp/train.log 2>&1 &
+    --print_freq 100 \
+    --port 12387 #> $asr_exp/train.log 2>&1 &
     
   echo "[Stage 6] ASR Training Finished."
 fi
@@ -81,16 +77,15 @@ if [ $stage -le 3 ] && [ $end_stage -ge 3 ]; then
     
     $cmd JOB=1:$nj $desdir/log/decode.JOB.log \
       CUDA_VISIBLE_DEVICES=JOB ctc_decode.py \
+        --task "ctc" \
         --test_config conf/ctc_decode.yaml \
         --lm_config conf/lm.yaml \
         --data_path $desdir/feats.JOB.scp \
         --resume_model $test_model \
         --result_file $desdir/token_results.JOB.txt \
         --batch_size $batch_size \
-        --decode_type $decode_type \
         --rnnlm $rnnlm_model \
         --lm_weight $lmwt \
-        --use_cmvn \
         --print_freq 20 
     
     cat $desdir/token_results.*.txt | sort -k1,1 > $desdir/token_results.txt
